@@ -6,6 +6,8 @@ export default {
       incrementalCache: "dummy",
       tagCache: "dummy",
       queue: "dummy",
+      // Override font manifest to prevent loading
+      fontManifest: () => ({}),
     },
   },
 

@@ -12,6 +12,9 @@ type PrintRequestBody = {
  * 
  * Handles printing directly inside Next.js — no separate print server needed.
  * Receives HTML + printer name → renders to PDF via Puppeteer → sends to Windows printer.
+ * 
+ * NOTE: This endpoint is only available in Node.js environments (local dev/deployment).
+ * It will not work in Cloudflare Workers due to sandboxing constraints.
  */
 
 // Map logical printer names to actual Windows printer names
@@ -22,7 +25,21 @@ const PRINTER_MAP: Record<string, string> = {
 
 const TMP_DIR = path.join(process.cwd(), 'print-server', 'tmp');
 
+// Check if running in Cloudflare Workers environment
+const isCloudflareWorker = typeof global !== 'undefined' && (global as any).__VITEST_WORKER__;
+
 export async function POST(request: NextRequest) {
+  // Block print requests on Cloudflare Workers
+  if (typeof (global as any).caches !== 'undefined' && !process.versions.node) {
+    return NextResponse.json(
+      { 
+        status: 'error', 
+        message: 'Print endpoint is not available in Cloudflare Workers. Use a Node.js backend for printing.' 
+      },
+      { status: 503 }
+    );
+  }
+
   try {
     const body = (await request.json()) as PrintRequestBody;
     const { html, printerName } = body;
@@ -51,9 +68,21 @@ export async function POST(request: NextRequest) {
 }
 
 async function printHtml(htmlContent: string, printerName: string) {
-  // Dynamic imports to avoid bundling issues
-  const puppeteer = require('puppeteer');
-  const pdfToPrinter = require('pdf-to-printer');
+  // Only available in Node.js environments
+  if (!process.versions.node) {
+    throw new Error('Printing is only supported in Node.js environments');
+  }
+
+  // Lazy load Node.js-specific dependencies
+  let puppeteer: any;
+  let pdfToPrinter: any;
+  
+  try {
+    puppeteer = await import('puppeteer').then(m => m.default);
+    pdfToPrinter = await import('pdf-to-printer').then(m => m.default || m);
+  } catch (err: any) {
+    throw new Error(`Failed to load print dependencies: ${err.message}`);
+  }
 
   // Ensure tmp directory exists
   if (!fs.existsSync(TMP_DIR)) {
