@@ -53,18 +53,6 @@ export default function InforCard({ children, title, logo }: propTypes) {
             <p className="px-5 font-battambong font-light mt-5 text-sm text-center text-gray-600"> ទំនាក់ទំនងយើងខ្ញុំតាមរយៈបណ្តាញសង្គម <br />
               Contact us through our official social media channels</p>
             <div className="flex flex-row space-x-6 mt-5">
-<<<<<<< HEAD
-              {/* Google Map */}
-              <Link href={info?.googlemap || "https://maps.app.goo.gl/HwjG8EuDrrMeAmrY6?g_st=it"}>
-                <img className="w-10 h-10 hover:scale-110 transition-transform" src="/icons/map.svg" alt="Google Map" width={40} height={40} />
-              </Link>
-              {/* Telegram */}
-              <Link href={info?.telegram || "https://t.me/@tonle168"}>
-                <img className="w-10 h-10 hover:scale-110 transition-transform" src="/icons/telegram.svg" alt="Telegram" width={40} height={40} />
-              </Link>
-              {/* Tiktok */}
-              <Link href={info?.tiktok || "https://www.tiktok.com/@tonl.noodle.and.c?_r=1"}>
-=======
               {/* Facebook */}
               <Link href={info?.facebook || "https://www.facebook.com/share/1Aq4UDumRA/?mibextid=wwXIfr"}>
                 <img className="w-10 h-10 hover:scale-110 transition-transform" src="/icons/facebook.svg" alt="Facebook" width={40} height={40} />
@@ -75,7 +63,6 @@ export default function InforCard({ children, title, logo }: propTypes) {
               </Link>
               {/* Tiktok */}
               <Link href={info?.tiktok || "#"}>
->>>>>>> 902f8cf (new update)
                 <img className="w-10 h-10 hover:scale-110 transition-transform" src="/icons/tiktok.svg" alt="Tiktok" width={40} height={40} />
               </Link>
             </div>
