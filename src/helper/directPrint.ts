@@ -18,7 +18,7 @@ export function connectWS() {
 
 export function DirectPrint(data: { printer_name: string; html_data: string; position?: number; numprint?: number }) {
   console.log('[DirectPrint] Sending print job:', data.printer_name);
-  
+
   sendPrintJob(data.html_data, data.printer_name);
   return true;
 }

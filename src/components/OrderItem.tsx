@@ -16,40 +16,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import { DirectPrint } from "@/helper/directPrint";
 
 
-export default function OrderItem({ cur }: any) {
+export default function OrderItem({ cur, historyOrder, setHistoryOrder, isClickOrder, setClickOrder }: any) {
   const { t } = useTranslation();
-  const [historyOrder, setHistoryOrder] = useState<orderHistoryType | null>(null)
   const { projectName, tableNumber } = useParams()
   const [isLoading, setIsLoading] = useState(false);
 
-  const [isClickOrder, setClickOrder] = useState(false)
   const { items: basket, totalItems, totalPrice } = useSelector((state: RootState) => state.cart);
-  const endPoint = `https://${projectName}.tsdsolution.net/api/DriverController/suspends`
-
-
-  // Fetch history order details on component mount
-  useEffect(() => {
-    console.log(projectName)
-    const fetchHistoryOrder = async () => {
-      try {
-        const formData = new FormData();
-        formData.append("table_num", `${tableNumber}`)
-        const response = await axios.post(endPoint, formData);
-        const data = response.data;
-        setHistoryOrder(data)
-
-        console.log("------------------- HISTORY ORDER DATA -------------------");
-        console.log(data);
-        console.log("----------------------------------------------------------");
-
-        console.log("Fetched data:", data);
-      } catch (error) {
-        console.error("Error fetching history order:", error);
-      }
-    };
-
-    fetchHistoryOrder();
-  }, [projectName, tableNumber, isClickOrder]); // Ensure useEffect dependencies are correct
 
   const dispatch = useDispatch()
 
@@ -257,10 +229,16 @@ export default function OrderItem({ cur }: any) {
         className: "font-battambong"
       });
 
-      const drinkItems = basket.filter((item: any) => item.brand?.toLowerCase() === 'drink');
-      const kitchenItems = basket.filter((item: any) => item.brand?.toLowerCase() !== 'drink');
+      const drinkItems = basket.filter((item: any) => {
+        const brand = item.brand?.toLowerCase();
+        return brand === 'drink' || brand === 'standard';
+      });
+      const kitchenItems = basket.filter((item: any) => {
+        const brand = item.brand?.toLowerCase();
+        return brand !== 'drink' && brand !== 'standard';
+      });
       
-      if (kitchenItems.length > 0) handlePrint(kitchenItems, "kitchen");
+      if (kitchenItems.length > 0) handlePrint(kitchenItems, "food");
       if (drinkItems.length > 0) handlePrint(drinkItems, "drink");
       // end akk
       dispatch(clearCart());

@@ -45,5 +45,15 @@
     "lessIceLabel": "ទឹកកកតិច",
     "optionalCommentLabel": "ចំណាំបន្ថែម",
     "commentPlaceholder": "បន្ថែមចំណាំនៅទីនេះ...",
-    "addToBasketLabel": "បន្ថែមទៅក្នុងកញ្ចប់"
+    "addToBasketLabel": "បន្ថែមទៅក្នុងកញ្ចប់",
+    "selectTableTitle": "សូមជ្រើសរើសតុរបស់អ្នក",
+    "selectTableSubtitle": "ជ្រើសរើសតុរបស់អ្នក ដើម្បីចាប់ផ្តើមកម្ម៉ង់",
+    "searchTable": "ស្វែងរកតុ...",
+    "allZones": "តំបន់ទាំងអស់",
+    "zoneLabel": "តំបន់",
+    "vipZone": "វីអាយភី / ពិសេស",
+    "tableSelected": "បានជ្រើសរើស",
+    "occupied": "មានភ្ញៀវ",
+    "available": "ទំនេរ",
+    "changeTable": "តុ"
 }

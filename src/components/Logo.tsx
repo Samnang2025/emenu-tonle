@@ -8,11 +8,15 @@ type PropsType = {
 
 export default function Logo({ image, className }: PropsType) {
   return (
- 
-      <div className={` h-12 w-12 rounded-full ${className}`}>
-        {/* <div className="rounded-full  w-[57.77px] h-[57.77px] "> */}
-        <img alt='' className='w-full h-full object-contain' src={image} width={100} height={100} onClick={() => (document.getElementById('my_modal_2') as HTMLDialogElement).showModal()}  />
-        {/* </div> */}
-      </div>
-  )
+    <div className={`h-100 w-100 ${className}`}>
+      <img
+        alt=''
+        className='w-full h-full object-contain cursor-pointer'
+        src="/images/tonle.jpg"
+        width={100}
+        height={100}
+        onClick={() => (document.getElementById('my_modal_2') as HTMLDialogElement).showModal()}
+      />
+    </div>
+  );
 }

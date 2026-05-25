@@ -20,6 +20,8 @@ type PrintRequestBody = {
 // Map logical printer names to actual Windows printer names
 const PRINTER_MAP: Record<string, string> = {
   'kitchen': 'kitchen',
+  'food': 'food',
+  'drink': 'drink',
   'POS-80C': 'POS-80C',
 };
 
@@ -32,9 +34,9 @@ export async function POST(request: NextRequest) {
   // Block print requests on Cloudflare Workers
   if (typeof (global as any).caches !== 'undefined' && !process.versions.node) {
     return NextResponse.json(
-      { 
-        status: 'error', 
-        message: 'Print endpoint is not available in Cloudflare Workers. Use a Node.js backend for printing.' 
+      {
+        status: 'error',
+        message: 'Print endpoint is not available in Cloudflare Workers. Use a Node.js backend for printing.'
       },
       { status: 503 }
     );
@@ -76,7 +78,7 @@ async function printHtml(htmlContent: string, printerName: string) {
   // Lazy load Node.js-specific dependencies
   let puppeteer: any;
   let pdfToPrinter: any;
-  
+
   try {
     puppeteer = await import('puppeteer').then(m => m.default);
     pdfToPrinter = await import('pdf-to-printer').then(m => m.default || m);
@@ -113,5 +115,5 @@ async function printHtml(htmlContent: string, printerName: string) {
   await pdfToPrinter.print(tmpFile, { printer: printerName });
 
   // Clean up temp file
-  fs.unlink(tmpFile, () => {});
+  fs.unlink(tmpFile, () => { });
 }
