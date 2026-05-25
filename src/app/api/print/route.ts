@@ -56,8 +56,9 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const body = (await request.json()) as PrintRequestBody;
-    const { html, printerName } = body;
+    const body = (await request.json()) as PrintRequestBody & Record<string, any>;
+    const html = body.html || body.html_data;
+    const printerName = body.printerName || body.printer_name;
 
     if (!html || !printerName) {
       return NextResponse.json(
