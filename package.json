@@ -17,7 +17,6 @@
     "swiper": "^11.2.5"
   },
   "devDependencies": {
-    "@opennextjs/cloudflare": "^0.5.3",
     "@types/node": "22.9.1",
     "@types/numeral": "^2.0.5",
     "@types/react": "18.3.12",
@@ -31,12 +30,10 @@
     "wrangler": "^3.107.3"
   },
   "scripts": {
-    "build": "opennextjs-cloudflare",
+    "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
-    "deploy": "wrangler deploy",
-    "preview": "wrangler dev",
     "start:print-server": "node print-server/server.js"
   }
 }
