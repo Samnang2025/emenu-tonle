@@ -12,6 +12,8 @@ import fs from 'fs';
 // Map logical printer names to actual Windows printer names
 const PRINTER_MAP: Record<string, string> = {
   'kitchen': 'kitchen',
+  'food': 'food',
+  'drink': 'drink',
   'POS-80C': 'POS-80C',
 };
 
@@ -19,7 +21,7 @@ const TMP_DIR = path.join(process.cwd(), 'print-server', 'tmp');
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const body = await request.json() as any;
     const { html, printerName } = body;
 
     if (!html || !printerName) {

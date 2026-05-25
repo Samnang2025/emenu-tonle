@@ -25,7 +25,7 @@ async function sendPrintJob(html: string, printerName: string) {
       body: JSON.stringify({ html, printerName }),
     });
 
-    const result = await response.json();
+    const result = await response.json() as any;
 
     if (result.status === 'ok') {
       console.log(`[DirectPrint] ✅ Printed on "${result.printer}"`);

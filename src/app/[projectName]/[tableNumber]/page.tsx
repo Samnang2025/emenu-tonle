@@ -17,10 +17,32 @@ const RIVER_SNACK_CATEGORY = "គ្រឿងក្លែមទន្លេ"; //
 
 export default function Home() {
 
-  const { projectName } = useParams();
+  const { projectName, tableNumber } = useParams();
   const { t } = useTranslation();
   const project = Array.isArray(projectName) ? projectName[0] : projectName;
   const [loading, setLoading] = useState(true); // Loading state
+  const [historyOrder, setHistoryOrder] = useState<any>(null);
+  const [isClickOrder, setClickOrder] = useState(false);
+
+  // Fetch history order details (suspend order) on component mount and when an order is placed
+  useEffect(() => {
+    if (!projectName || !tableNumber) return;
+    const fetchHistoryOrder = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("table_num", `${tableNumber}`);
+        const response = await axios.post(
+          `https://${projectName}.tsdsolution.net/api/DriverController/suspends`,
+          formData
+        );
+        setHistoryOrder(response.data);
+      } catch (error) {
+        console.error("Error fetching history order:", error);
+      }
+    };
+    fetchHistoryOrder();
+  }, [projectName, tableNumber, isClickOrder]);
+
   //Sok Thean Subcategory
   const [activeSection, setActiveSection] = useState<number>(0); // State to track active section
   const [activeSubSection, setActiveSubSection] = useState<string>(""); // State to track active sub-section
@@ -207,7 +229,7 @@ export default function Home() {
                     <div className="w-20 h-[2px] rounded-full bg-gray-300"></div>
                     <h1
                       id={`${category.category}`}
-                      className={`font-bold font-dangrek text-[22px]  text-nowrap  max-[400px]:text-[20px]`}
+                      className={`font-bold font-dangrek text-[26px]  text-nowrap  max-[400px]:text-[20px]`}
                     >
                       {category.category}
                     </h1>
@@ -229,7 +251,7 @@ export default function Home() {
                     )}
 
                     {/* Items listed without images, grouped by subcategory */}
-                    <div className="grid grid-cols-2 gap-x-4">
+                    <div className="grid grid-cols-1 gap-x-4">
                       {Array.from(new Set(category.items.map(item => {
                         const sub = item.subcategory;
                         return sub && sub.trim() !== "" ? sub.trim() : "Other";
@@ -244,7 +266,7 @@ export default function Home() {
                             }}
                           >
                             {subName !== "Other" && (
-                              <h2 className="font-battambong text-[20px] font-semibold mb-1 px-1 text-black">
+                              <h2 className="font-battambong text-[24px] font-semibold mb-1 px-1 text-black">
                                 {subName}
                               </h2>
                             )}
@@ -322,9 +344,15 @@ export default function Home() {
         {/* Bottom action bar */}
         <div className="fixed bottom-0 px-4 py-4 max-w-[575px] z-[50] items-center w-full cursor-pointer rounded-t-2xl bg-white flex justify-between shadow-[0_-5px_15px_rgba(0,0,0,0.1)]"> {/* Sok Thean popup Component */}
           {/* Display order item component */}
-          <OrderItem cur={cur} />
+          <OrderItem 
+            cur={cur} 
+            historyOrder={historyOrder} 
+            setHistoryOrder={setHistoryOrder}
+            isClickOrder={isClickOrder}
+            setClickOrder={setClickOrder}
+          />
           {/* Basket bar component */}
-          <BasketBar cur={cur} />
+          <BasketBar cur={cur} historyOrder={historyOrder} />
 
           {/* Button to trigger modal */}
           <button
