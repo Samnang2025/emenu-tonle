@@ -34,6 +34,11 @@ async function sendPrintJob(html: string, printerName: string): Promise<boolean>
       printServerUrl = window.localStorage.getItem('print_server_url') || '';
     }
 
+    // Default to the NEXT_PUBLIC_PRINT_SERVER_URL environment variable if localStorage is not configured
+    if (!printServerUrl && process.env.NEXT_PUBLIC_PRINT_SERVER_URL) {
+      printServerUrl = process.env.NEXT_PUBLIC_PRINT_SERVER_URL;
+    }
+
     const endpoint = printServerUrl 
       ? `${printServerUrl.replace(/\/$/, '')}/api/print` 
       : '/api/print';
