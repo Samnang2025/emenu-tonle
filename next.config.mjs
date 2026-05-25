@@ -14,6 +14,14 @@ const nextConfig = {
     }
     return config;
   },
+  async rewrites() {
+    return [
+      {
+        source: '/api/proxy/:projectName/:path*',
+        destination: 'https://:projectName.tsdsolution.net/api/:path*',
+      },
+    ];
+  },
 };
 
 export default nextConfig;
