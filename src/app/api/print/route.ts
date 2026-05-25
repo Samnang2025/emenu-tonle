@@ -42,6 +42,19 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // Gracefully handle Vercel deployment since local printing / Puppeteer is not supported in Vercel Cloud functions
+  const isVercel = process.env.VERCEL === '1' || process.env.NEXT_PUBLIC_VERCEL_ENV !== undefined;
+  if (isVercel) {
+    return NextResponse.json(
+      {
+        status: 'error',
+        errorType: 'VERCEL_ENVIRONMENT',
+        message: 'Direct printing via serverless function is not supported on Vercel. Please run a local Next.js instance or configure a local print server URL.'
+      },
+      { status: 200 }
+    );
+  }
+
   try {
     const body = (await request.json()) as PrintRequestBody;
     const { html, printerName } = body;

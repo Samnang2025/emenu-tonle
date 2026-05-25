@@ -27,7 +27,7 @@ export default function OrderItem({ cur, historyOrder, setHistoryOrder, isClickO
 
 
   // my code akk
-  const handlePrint = (printItems: any[], printerName: string) => {
+  const handlePrint = async (printItems: any[], printerName: string) => {
     if (printItems.length === 0) return;
 
     const title = printerName.toLowerCase() === 'drink' ? 'Drink Order' : 'Kitchen Order';
@@ -167,7 +167,7 @@ export default function OrderItem({ cur, historyOrder, setHistoryOrder, isClickO
       </html>
     `;
 
-    const success = DirectPrint({
+    const success = await DirectPrint({
       printer_name: printerName,
       html_data: content
     });
@@ -238,8 +238,8 @@ export default function OrderItem({ cur, historyOrder, setHistoryOrder, isClickO
         return brand !== 'drink' && brand !== 'standard';
       });
       
-      if (kitchenItems.length > 0) handlePrint(kitchenItems, "food");
-      if (drinkItems.length > 0) handlePrint(drinkItems, "drink");
+      if (kitchenItems.length > 0) await handlePrint(kitchenItems, "food");
+      if (drinkItems.length > 0) await handlePrint(drinkItems, "drink");
       // end akk
       dispatch(clearCart());
       setClickOrder(!isClickOrder);
