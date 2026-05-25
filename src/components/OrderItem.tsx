@@ -238,8 +238,8 @@ export default function OrderItem({ cur, historyOrder, setHistoryOrder, isClickO
         return brand !== 'drink' && brand !== 'standard';
       });
 
-      if (kitchenItems.length > 0) await handlePrint(kitchenItems, "kitchen");
-      if (drinkItems.length > 0) await handlePrint(drinkItems, "drink");
+      if (foodItems.length > 0) await handlePrint(foodItems, "Food");
+      if (drinkItems.length > 0) await handlePrint(drinkItems, "Drink");
       // end akk
       dispatch(clearCart());
       setClickOrder(!isClickOrder);
