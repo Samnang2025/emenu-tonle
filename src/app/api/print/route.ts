@@ -19,10 +19,10 @@ type PrintRequestBody = {
 
 // Map logical printer names to actual Windows printer names
 const PRINTER_MAP: Record<string, string> = {
-  'kitchen': 'kitchen',
-  'food': 'food',
-  'drink': 'drink',
-  'POS-80C': 'POS-80C',
+  'kitchen': 'Kitchen',
+  'food': 'Kitchen',
+  'drink': 'Drink',
+  'pos-80c': 'POS-80C',
 };
 
 const TMP_DIR = path.join(process.cwd(), 'print-server', 'tmp');
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const resolvedPrinter = PRINTER_MAP[printerName] || printerName;
+    const resolvedPrinter = PRINTER_MAP[printerName] || PRINTER_MAP[printerName.toLowerCase()] || printerName;
     console.log(`[DirectPrint] Print job received → "${printerName}" → Printer: "${resolvedPrinter}"`);
 
     await printHtml(html, resolvedPrinter);

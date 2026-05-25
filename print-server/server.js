@@ -41,7 +41,7 @@ async function createServer() {
     }
   });
 
-  const port = process.env.PRINT_SERVER_PORT || 3001;
+  const port = process.env.PRINT_SERVER_PORT || 8085;
   expressP.listen(port, () => console.log(`[print-server] Listening on http://0.0.0.0:${port}`));
 }
 
