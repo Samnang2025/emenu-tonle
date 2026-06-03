@@ -45,5 +45,15 @@
     "lessIceLabel": "Less ice",
     "optionalCommentLabel": "Optional Comment",
     "commentPlaceholder": "Add special instructions here...",
-    "addToBasketLabel": "Add to Basket"
+    "addToBasketLabel": "Add to Basket",
+    "selectTableTitle": "Please Select Your Table",
+    "selectTableSubtitle": "Choose your table to start ordering from the menu",
+    "searchTable": "Search table...",
+    "allZones": "All Zones",
+    "zoneLabel": "Zone",
+    "vipZone": "VIP / Special",
+    "tableSelected": "Selected",
+    "occupied": "Occupied",
+    "available": "Available",
+    "changeTable": "Change Table"
 }

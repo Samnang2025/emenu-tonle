@@ -8,30 +8,30 @@ import numeral from 'numeral';
 import { useTranslation } from '@/lib/i18n'; //ST Translation
 type PropsType = {
     cartItem: CartItem;
-    cur?:any
+    cur?: any
 };
 
 export default function Item({ cartItem, cur }: PropsType) {
     //AKK Translation
     const { locale } = useTranslation();
-    const {projectName} = useParams()
-    const {name, second_name, price, promo_price,id, imagePath, quantity}= cartItem
-    
+    const { projectName } = useParams()
+    const { name, second_name, price, promo_price, id, cartItemId, imagePath, quantity } = cartItem
+
     const displayName = (locale === 'en' && second_name) ? second_name : name;
     //End AKK Translation
     const real_price = numeral(promo_price).format('0.[00]')
     const actual_price = numeral(price).format('0.[00]')
-  const imgUrl = `https://${projectName}.tsdsolution.net/assets/uploads/`
+    const imgUrl = `https://tonle-coffee.pos.tsdsolution.net/assets/uploads/`
     const dispatch = useDispatch();
     const handleQuantityChange = (newQuantity: number) => {
-        if(newQuantity > 0){
-        dispatch(updateCartItem({ itemId: cartItem.id, quantity: newQuantity }));
+        if (newQuantity > 0) {
+            dispatch(updateCartItem({ cartItemId: cartItemId || id, quantity: newQuantity }));
         }
     };
 
-    const handleRemove = (id: string)=>{
-        console.log(id)
-        dispatch(removeFromCart({itemId: id}))
+    const handleRemove = (identifier: string) => {
+        console.log(identifier)
+        dispatch(removeFromCart({ cartItemId: identifier }))
     }
 
     return (
@@ -54,10 +54,10 @@ export default function Item({ cartItem, cur }: PropsType) {
                         )}
                         {/* End ST Add comment */}
                         <div className="space-x-3 ">
-                            <span className='text-orange-600 font-bold'>{cur || "$"}{ promo_price ? real_price : actual_price}</span>
+                            <span className='text-orange-600 font-bold'>{cur || "$"}{promo_price ? real_price : actual_price}</span>
                             {
-                                promo_price ? 
-                                (<span className="line-through">{cur || "$"}{actual_price}</span>) : ""
+                                promo_price ?
+                                    (<span className="line-through">{cur || "$"}{actual_price}</span>) : ""
                             }
                         </div>
                     </div>
@@ -65,7 +65,7 @@ export default function Item({ cartItem, cur }: PropsType) {
                 {/* customize item  */}
                 <div className='flex flex-row items-center space-x-2'>
                     {/* delete button  */}
-                    <button onClick={()=> handleRemove(cartItem.id)} className='bg-orange-100 rounded-full w-8 h-8 flex justify-center items-center flex-shrink-0'>
+                    <button onClick={() => handleRemove(cartItemId || id)} className='bg-orange-100 rounded-full w-8 h-8 flex justify-center items-center flex-shrink-0'>
                         <img src={"/icons/delete.svg"} alt='' className='h-4 w-4' />
                     </button>
 

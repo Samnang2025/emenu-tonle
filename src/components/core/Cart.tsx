@@ -32,15 +32,16 @@ export default function Cart({ cartItem, isOrderPage, cur }: PropType) {
   const dispatch = useDispatch();
   const cart = useSelector((state: RootState) => state.cart);
 
-  // Find existing item in cart to get its quantity
-  const existingCartItem = cart.items.find((item) => item.id === id);
-  const currentQuantity = existingCartItem ? existingCartItem.quantity : 0;
+  // Find existing items in cart and sum their quantities
+  const currentQuantity = cart.items
+    .filter((item) => item.id === id)
+    .reduce((sum, item) => sum + item.quantity, 0);
   const [eachItemOrderNumber, setOrderItem] = useState(currentQuantity);
 
   const [isModalOpen, setIsModalOpen] = useState(false); // Sok Thean popup Component
 
   // Base URL for image
-  const imgUrl = `https://${projectName}.tsdsolution.net/assets/uploads/`;
+  const imgUrl = `https://tonle-coffee.pos.tsdsolution.net/assets/uploads/`;
 
   // Handle adding item to cart
   const handleOrder = (comment?: string) => { //Sok Thean Add comment

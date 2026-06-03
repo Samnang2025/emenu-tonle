@@ -21,7 +21,7 @@ export default function NightFoodCart({ cartItem, isOrderPage, cur }: PropType) 
   //AKK Translation
   const { locale } = useTranslation();
   const { id, name, second_name, imagePath, price, promo_price, code, type, subcategory, brand } = cartItem;
-  
+
   const displayName = (locale === 'en' && second_name) ? second_name : name;
   //End AKK Translation
   const real_price = numeral(promo_price).format("0.[00]");
@@ -31,13 +31,14 @@ export default function NightFoodCart({ cartItem, isOrderPage, cur }: PropType) 
   const dispatch = useDispatch();
   const cart = useSelector((state: RootState) => state.cart);
 
-  const existingCartItem = cart.items.find((item) => item.id === id);
-  const currentQuantity = existingCartItem ? existingCartItem.quantity : 0;
+  const currentQuantity = cart.items
+    .filter((item) => item.id === id)
+    .reduce((sum, item) => sum + item.quantity, 0);
   const [eachItemOrderNumber, setOrderItem] = useState(currentQuantity);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const imgUrl = `https://${projectName}.tsdsolution.net/assets/uploads/`;
+  const imgUrl = `https://tonle-coffee.pos.tsdsolution.net/assets/uploads/`;
 
   const handleOrder = (comment?: string) => {
     setOrderItem((prev) => prev + 1);
@@ -68,15 +69,15 @@ export default function NightFoodCart({ cartItem, isOrderPage, cur }: PropType) 
         className="w-full py-1 cursor-pointer flex justify-between items-start gap-2"
         onClick={() => isOrderPage && setIsModalOpen(true)}
       >
-        <span className="font-battambong text-[18px] text-black">
+        <span className="font-battambong text-[20px] text-black">
           - {displayName} {/* AKK Translation */}
         </span>
         <div className="flex flex-col items-end">
-          <span className="text-[18px] text-orange-600 whitespace-nowrap font-bold">
+          <span className="text-[17px] text-orange-600 whitespace-nowrap font-bold">
             {cur || "$"}{promo_price ? real_price : actual_price}
           </span>
           {promo_price && (
-            <span className="text-[13px] text-gray-400 line-through">
+            <span className="text-[15px] text-gray-400 line-through">
               {cur || "$"}{actual_price}
             </span>
           )}

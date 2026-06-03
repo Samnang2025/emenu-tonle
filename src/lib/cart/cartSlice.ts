@@ -16,41 +16,43 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action: PayloadAction<CartItem>) => {
-      const { id, quantity, promo_price, price, comment } = action.payload; //Sok Thean Add comment
-      const existingItem = state.items.find(item => item.id === id);
+      const { id, promo_price, price, comment } = action.payload;
+      const cartItemId = `${id}-${comment || ''}`;
+      const existingItem = state.items.find(item => item.cartItemId === cartItemId);
       const itemPrice = promo_price || price;
       if (existingItem) {
-        existingItem.quantity = quantity;
+        existingItem.quantity += 1;
         existingItem.subtotalPrice = roundToTwoDecimals(existingItem.quantity * itemPrice);
-        //Sok Thean Add comment
-        // Only update comment if a non-null/undefined comment is provided
-        if (comment !== undefined && comment !== null) {
-          existingItem.comment = comment;
-        }
-        // End ST Add comment
       } else {
-        action.payload.subtotalPrice = roundToTwoDecimals(quantity * itemPrice);
-        state.items.push(action.payload);
+        const newItem = {
+          ...action.payload,
+          cartItemId,
+          quantity: 1,
+          subtotalPrice: roundToTwoDecimals(1 * itemPrice),
+        };
+        state.items.push(newItem);
       }
       state.totalItems = state.items.reduce((total, item) => total + item.quantity, 0); // Update totalItems
       state.totalPrice = roundToTwoDecimals(
         state.items.reduce((total, item) => total + (item.subtotalPrice ? item.subtotalPrice : 0), 0)
       ); // Update totalPrice
     },
-    removeFromCart: (state, action: PayloadAction<{ itemId: string }>) => {
-      const { itemId } = action.payload;
-      const existingItem = state.items.find(item => item.id === itemId);
+    removeFromCart: (state, action: PayloadAction<{ cartItemId?: string; itemId?: string }>) => {
+      const { cartItemId, itemId } = action.payload;
+      const targetId = cartItemId || itemId;
+      const existingItem = state.items.find(item => (item.cartItemId || item.id) === targetId);
       if (existingItem) {
-        state.items = state.items.filter(item => item.id !== itemId);
+        state.items = state.items.filter(item => (item.cartItemId || item.id) !== targetId);
         state.totalItems = state.items.reduce((total, item) => total + item.quantity, 0); // Update totalItems
         state.totalPrice = roundToTwoDecimals(
           state.items.reduce((total, item) => total + (item.subtotalPrice ? item.subtotalPrice : 0), 0)
         ); // Update totalPrice
       }
     },
-    updateCartItem: (state, action: PayloadAction<{ itemId: string, quantity: number }>) => {
-      const { itemId, quantity } = action.payload;
-      const existingItem = state.items.find(item => item.id === itemId);
+    updateCartItem: (state, action: PayloadAction<{ cartItemId?: string; itemId?: string; quantity: number }>) => {
+      const { cartItemId, itemId, quantity } = action.payload;
+      const targetId = cartItemId || itemId;
+      const existingItem = state.items.find(item => (item.cartItemId || item.id) === targetId);
       if (existingItem) {
         existingItem.quantity = quantity;
         const itemPrice = existingItem.promo_price || existingItem.price;

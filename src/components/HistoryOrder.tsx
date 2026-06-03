@@ -7,21 +7,21 @@ import { useTranslation } from '@/lib/i18n';
 
 type PropsType = {
     cartItem: orderHistory;
-    cur?:any
+    cur?: any
 };
 
-export default function HistoryOrder({ cartItem , cur}: PropsType) {
+export default function HistoryOrder({ cartItem, cur }: PropsType) {
     const { locale } = useTranslation();
     const { projectName, tableNumber } = useParams();
-    const { name, second_name, price, id , imagePath, quantity, promo_price,  } = cartItem;
-    
+    const { name, second_name, price, id, imagePath, quantity, promo_price, } = cartItem;
+
     const displayName = (locale === 'en' && second_name) ? second_name : name;
     // Format prices
     const real_price = numeral(promo_price).format('0.[00]');
     const actual_price = numeral(price).format('0.[00]');
     const qty = numeral(quantity).format('0')
     // Construct image URL
-    const imgUrl = `https://${projectName}.tsdsolution.net/assets/uploads/`;
+    const imgUrl = `https://tonle-coffee.pos.tsdsolution.net/assets/uploads/`;
 
     return (
         <>

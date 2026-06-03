@@ -31,6 +31,7 @@ type MenuType = Category[];
 // Data for items in the cart, to be sent in POST requests
 interface CartItem {
   id: string; // Unique identifier for the cart item
+  cartItemId?: string; // ST Unique identifier for the customized cart item row
   name: string; // Name of the cart item
   second_name?: string; //ST Khmer name of the cart item
   imagePath: string; // Path to the image of the cart item

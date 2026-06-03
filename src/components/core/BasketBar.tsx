@@ -5,9 +5,13 @@ import { RootState } from "@/lib/store";
 import numeral from "numeral";
 import { useTranslation } from "@/lib/i18n";
 
-export default function BasketBar({ cur }: any) {
+export default function BasketBar({ cur, historyOrder }: any) {
   const { t } = useTranslation();
   const { totalItems, totalPrice } = useSelector((state: RootState) => state.cart);
+
+  const displayPrice = historyOrder?.data ? (parseFloat(historyOrder.data.total_price || "0") + totalPrice) : totalPrice;
+  const displayItems = historyOrder?.data ? (parseInt(historyOrder.data.totalItems || "0") + totalItems) : totalItems;
+
   return (
     <>
       <div className="flex space-x-1 rounded-full p-3 bg-orange text-[21px] max-[450px]:text-[19px] max-[415px]:text-[16px] text-white w-10/12 flex-row justify-between items-center">
@@ -22,9 +26,9 @@ export default function BasketBar({ cur }: any) {
         >
           <h1 className="text-nowrap font-dangrek text-white">{t("viewOrder")}</h1>
           <div className="max-[450px]:text-[19px] max-[415px]:text-[16px] flex items-center gap-x-3 text-[21px] text-white">
-            <span>{cur || "$"}{numeral(totalPrice).format('0.[00]')}</span> {/* Sok Thean popup Component */}
+            <span>{cur || "$"}{numeral(displayPrice).format('0.[00]')}</span> {/* Sok Thean popup Component */}
             <p className="w-8 h-8 flex justify-center items-center bg-white text-orange rounded-full">
-              {totalItems !== 0 ? totalItems : "0"}
+              {displayItems !== 0 ? displayItems : "0"}
             </p>
           </div>
         </div>

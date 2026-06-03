@@ -7,6 +7,5 @@ import PageNotFound from "./PageNotFound";
 //Sok Thean Night Food
 import NightFoodCart from "./NightFoodCart";
 import NightFoodBanner from "./NightFoodBanner";
-import PrintConnection from "./PrintConnection";
-export { Cart, NavBar, BasketBar, Footer, Loading, PageNotFound, NightFoodCart, NightFoodBanner, PrintConnection };
+export { Cart, NavBar, BasketBar, Footer, Loading, PageNotFound, NightFoodCart, NightFoodBanner};
 //End ST Night Food

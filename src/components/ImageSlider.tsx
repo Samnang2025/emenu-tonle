@@ -1,5 +1,5 @@
 // components/ImageSlider.tsx
-import React, { useEffect, useState }  from 'react';
+import React, { useEffect, useState } from 'react';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
@@ -14,35 +14,35 @@ type propsType = {
 }
 
 
-const ImageSlider = ({images}: propsType) => {
-  const  {projectName} = useParams()
- 
-  const imgUrl = `https://${projectName}.tsdsolution.net/assets/uploads/`;
- 
+const ImageSlider = ({ images }: propsType) => {
+  const { projectName } = useParams()
+
+  const imgUrl = `https://tonle-coffee.pos.tsdsolution.net/assets/uploads/`;
+
   return (
     <Swiper
-    spaceBetween={30}
-    centeredSlides={true}
-    autoplay={{
-      delay: 2500,
-      disableOnInteraction: false,
-    }}
-    pagination={{
-      clickable: true,
-      renderBullet: function (index, className) {
-        return `<span class="${className} bg-orange-500"></span>`;
-      },
-    }}
-    modules={[Autoplay, Pagination]}
-    className="mySwiper h-52 w-full rounded-xl overflow-hidden "
+      spaceBetween={30}
+      centeredSlides={true}
+      autoplay={{
+        delay: 2500,
+        disableOnInteraction: false,
+      }}
+      pagination={{
+        clickable: true,
+        renderBullet: function (index, className) {
+          return `<span class="${className} bg-orange-500"></span>`;
+        },
+      }}
+      modules={[Autoplay, Pagination]}
+      className="mySwiper h-52 w-full rounded-xl overflow-hidden "
     >
- 
+
       {images.map((image, index) => (
         <SwiperSlide key={index} className='w-full bg-gray-300  overflow-hidden '>
-          <img  className=' object-cover w-full h-full'  src={`${imgUrl}/${image.name}`} alt='' width={250} height={1000} />
+          <img className=' object-cover w-full h-full' src={`${imgUrl}/${image.name}`} alt='' width={250} height={1000} />
         </SwiperSlide>
       ))}
-      {/* Add more slides as needed */} 
+      {/* Add more slides as needed */}
     </Swiper>
   );
 };

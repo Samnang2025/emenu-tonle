@@ -10,217 +10,28 @@ import numeral from "numeral";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import { orderHistoryType } from "@/types/model";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useTranslation } from "@/lib/i18n";
-import 'react-toastify/dist/ReactToastify.css';
-import { DirectPrint } from "@/helper/directPrint";
 
 
-export default function OrderItem({ cur }: any) {
+export default function OrderItem({ cur, historyOrder, setHistoryOrder, isClickOrder, setClickOrder }: any) {
   const { t } = useTranslation();
-  const [historyOrder, setHistoryOrder] = useState<orderHistoryType | null>(null)
   const { projectName, tableNumber } = useParams()
   const [isLoading, setIsLoading] = useState(false);
 
-  const [isClickOrder, setClickOrder] = useState(false)
   const { items: basket, totalItems, totalPrice } = useSelector((state: RootState) => state.cart);
-  const endPoint = `https://${projectName}.tsdsolution.net/api/DriverController/suspends`
-
-
-  // Fetch history order details on component mount
-  useEffect(() => {
-    console.log(projectName)
-    const fetchHistoryOrder = async () => {
-      try {
-        const formData = new FormData();
-        formData.append("table_num", `${tableNumber}`)
-        const response = await axios.post(endPoint, formData);
-        const data = response.data;
-        setHistoryOrder(data)
-
-        console.log("------------------- HISTORY ORDER DATA -------------------");
-        console.log(data);
-        console.log("----------------------------------------------------------");
-
-        console.log("Fetched data:", data);
-      } catch (error) {
-        console.error("Error fetching history order:", error);
-      }
-    };
-
-    fetchHistoryOrder();
-  }, [projectName, tableNumber, isClickOrder]); // Ensure useEffect dependencies are correct
 
   const dispatch = useDispatch()
 
 
-  // my code akk
-  const handlePrint = (printItems: any[], printerName: string) => {
-    if (printItems.length === 0) return;
-
-    const title = printerName.toLowerCase() === 'drink' ? 'Drink Order' : 'Kitchen Order';
-
-    const content = `
-      <html>
-        <head>
-          <title>${title}</title>
-          <style>
-            @page { margin-right: 15mm; }
-            * { box-sizing: border-box; margin: 0; padding: 0; }
-            body { 
-              width: 100%;
-              font-family: 'Khmer OS Battambang', sans-serif;
-              font-size: 12px;
-              font-weight: bold;
-              color: #000;
-            }
-            .receipt {
-              width: 100%;
-              padding: 5px;
-            }
-            .text-center { 
-              text-align: center; 
-            }
-            .dashed-line {
-              border: none;
-              border-top: 1px dashed #000;
-              margin: 8px 0;
-            }
-            .brand-section {
-              text-align: center;
-              padding: 10px 0 5px 0;
-            }
-            .brand-logo {
-              max-width: 120px;
-              max-height: 80px;
-              margin: 0 auto;
-            }
-            .table-info {
-              text-align: center;
-              font-size: 16px;
-              font-weight: bold;
-              padding: 5px 0;
-            }
-            .kitchen-title {
-              text-align: center;
-              font-size: 18px;
-              font-weight: bold;
-              padding: 8px 0;
-            }
-            .column-header {
-              display: flex;
-              justify-content: space-between;
-              padding: 4px 0;
-              font-weight: bold;
-              font-size: 12px;
-            }
-            .column-header-name {
-              text-align: left;
-            }
-            .column-header-qty {
-              text-align: right;
-            }
-            .order-item { 
-              display: flex; 
-              justify-content: space-between; 
-              padding: 3px 0;
-              font-size: 13px;
-              width: 100%;
-            }
-            .item-name {
-              flex: 1;
-              text-align: left;
-            }
-            .item-qty { 
-              width: 40px;
-              text-align: right;
-              font-weight: bold;
-            }
-            .comment { 
-              font-size: 10px; 
-              font-style: italic; 
-              padding-left: 10px;
-              padding-bottom: 2px;
-            }
-            .footer {
-              text-align: center;
-              font-size: 10px;
-              padding: 5px 0;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="receipt">
-            <!-- Brand Logo -->
-            <div class="brand-section">
-              <img src="${window.location.origin}/images/tonle.jpg" class="brand-logo" alt="Logo" />
-            </div>
-
-            <!-- Table Info -->
-            <div class="table-info">Table: ${historyOrder?.data?.table_name || historyOrder?.data?.table_num || historyOrder?.data?.suspend_note || tableNumber}</div>
-
-            <hr class="dashed-line" />
-
-            <!-- Kitchen Order Title -->
-            <div class="kitchen-title">${title}</div>
-
-            <hr class="dashed-line" />
-
-            <!-- Column Headers -->
-            <div class="column-header">
-              <div class="column-header-name">មុខទំនិញ<br/>Order List</div>
-              <div class="column-header-qty">ចំនួន<br/>QTY</div>
-            </div>
-
-            <hr class="dashed-line" />
-
-            <!-- Order Items -->
-            ${printItems.map(item => `
-              <div class="order-item">
-                <span class="item-name">${item.name}</span>
-                <span class="item-qty">${item.quantity}</span>
-              </div>
-              ${item.comment ? `<div class="comment">- ${item.comment}</div>` : ''}
-            `).join('')}
-
-            <hr class="dashed-line" />
-
-            <!-- Footer -->
-            <div class="footer">
-              <div>${new Date().toLocaleString()}</div>
-              <div>*** End of Order ***</div>
-            </div>
-          </div>
-        </body>
-      </html>
-    `;
-
-    const success = DirectPrint({
-      printer_name: printerName,
-      html_data: content
-    });
-
-    if (!success) {
-      // Fallback to browser print if DirectPrint server is not running
-      const printWindow = window.open('', '_blank', 'height=600,width=400');
-      if (!printWindow) return;
-      printWindow.document.write(content);
-      printWindow.document.close();
-      printWindow.focus();
-      setTimeout(() => {
-        printWindow.print();
-        printWindow.close();
-      }, 500);
-    }
-  };
-  // my code old 
+  // my code old
 
   const handleOrder = async () => {
     setIsLoading(true);
     const loading = toast.info("កំពុងធ្វើការកុម្ម៉ង់...", {
       autoClose: 2000,
       position: "top-center",
-      className: "font-battambong"
+      className: "font-battambang"
 
     });
 
@@ -230,9 +41,7 @@ export default function OrderItem({ cur }: any) {
       comment: comment || null,
     }));
 
-
     try {
-
       const data = {
         data: {
           id: historyOrder ? historyOrder?.data.id : null,
@@ -243,7 +52,7 @@ export default function OrderItem({ cur }: any) {
       };
       const jsonData = JSON.stringify(data)
       const response = await axios.post(
-        `https://${projectName}.tsdsolution.net/api/DriverController/suspend`,
+        `https://tonle-coffee.pos.tsdsolution.net/api/DriverController/order`,
         jsonData,
         {
           headers: {
@@ -253,17 +62,12 @@ export default function OrderItem({ cur }: any) {
       );
 
       toast.dismiss(loading)
-      toast.success("ការកុំម្ម៉ង់ទទួលបានជោគជ័យ!", {
+      toast.success("ការកុម្ម៉ង់ទទួលបានជោគជ័យ!", {
         autoClose: 2000,
         position: "top-center",
         className: "font-battambong"
       });
 
-      const drinkItems = basket.filter((item: any) => item.brand?.toLowerCase() === 'drink');
-      const kitchenItems = basket.filter((item: any) => item.brand?.toLowerCase() !== 'drink');
-      
-      if (kitchenItems.length > 0) handlePrint(kitchenItems, "kitchen");
-      if (drinkItems.length > 0) handlePrint(drinkItems, "drink");
       // end akk
       dispatch(clearCart());
       setClickOrder(!isClickOrder);
@@ -288,7 +92,6 @@ export default function OrderItem({ cur }: any) {
 
       <dialog id={"my_modal_3"} className={`modal backdrop-blur-[2px]`}>
         <div className="modal-box p-0 bg-white text-gray-900">
-          <ToastContainer />
           <form method="dialog">
             {/* if there is a button in form, it will close the modal */}
             <button className="btn  btn-sm btn-circle btn-ghost absolute right-2 top-2 text-xl  z-10">
@@ -308,10 +111,7 @@ export default function OrderItem({ cur }: any) {
               {/* item cart  */}
               {
                 basket.map((item, index) => (
-                  <>
-                    <Item key={index} cartItem={item} cur={cur} />
-
-                  </>
+                  <Item key={index} cartItem={item} cur={cur} />
                 ))
               }
             </div>
@@ -324,9 +124,7 @@ export default function OrderItem({ cur }: any) {
                 <div className="flex flex-col w-full space-y-3">
                   {
                     historyOrder?.items?.map((item: any, index: any) => (
-                      <>
-                        <HistoryOrder key={index} cartItem={item} cur={cur} />
-                      </>
+                      <HistoryOrder key={index} cartItem={item} cur={cur} />
                     ))
                   }
                 </div>
