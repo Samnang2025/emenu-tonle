@@ -32,7 +32,7 @@ export default function Home() {
         const formData = new FormData();
         formData.append("table_num", `${tableNumber}`);
         const response = await axios.post(
-          `https://tonle-coffee.pos.tsdsolution.net/api/DriverController/orders`,
+          `https://${projectName}.tsdsolution.net/api/DriverController/suspends`,
           formData
         );
         setHistoryOrder(response.data);
@@ -216,84 +216,42 @@ export default function Home() {
               const isListStyle = category.category === NIGHT_FOOD_CATEGORY || category.category === RIVER_SNACK_CATEGORY;
 
               return (
-                <div
-                  key={categoryIndex}
-                  className=""
-                  ref={(el) => {
-                    ref.current[categoryIndex] = el;
-                  }}
-                >
-                  {/* Display category header if items exist */}
-                  {category.items.length > 0 && (
-                    <div className="flex gap-3 justify-center  items-center mb-5">
-                      <div className="w-20 h-[2px] rounded-full bg-gray-300"></div>
-                      <h1
-                        id={`${category.category}`}
-                        className={`font-bold font-dangrek text-[26px]  text-nowrap  max-[400px]:text-[20px]`}
-                      >
-                        {category.category}
-                      </h1>
-                      <div className="w-20 h-[2px] rounded-full bg-gray-300"></div>
-                    </div>
-                  )}
-                  {/*Sok Thean Night Food*/}
-                  {/* === Custom UI for list style categories === */}
-                  {isListStyle ? (
-                    <div className="night-food-section">
-                      {/* Banner images - use first 2 item images */}
-                      {category.items.length > 0 && (
-                        <NightFoodBanner
-                          images={category.items
-                            .slice(0, 1)
-                            .map((item) => item.imagePath)}
-                          imgUrl={imgUrl}
-                        />
-                      )}
+              <div
+                key={categoryIndex}
+                className=""
+                ref={(el) => {
+                  ref.current[categoryIndex] = el;
+                }}
+              >
+                {/* Display category header if items exist */}
+                {category.items.length > 0 && (
+                  <div className="flex gap-3 justify-center  items-center mb-5">
+                    <div className="w-20 h-[2px] rounded-full bg-gray-300"></div>
+                    <h1
+                      id={`${category.category}`}
+                      className={`font-bold font-dangrek text-[26px]  text-nowrap  max-[400px]:text-[20px]`}
+                    >
+                      {category.category}
+                    </h1>
+                    <div className="w-20 h-[2px] rounded-full bg-gray-300"></div>
+                  </div>
+                )}
+                {/*Sok Thean Night Food*/}
+                {/* === Custom UI for list style categories === */}
+                {isListStyle ? (
+                  <div className="night-food-section">
+                    {/* Banner images - use first 2 item images */}
+                    {category.items.length > 0 && (
+                      <NightFoodBanner
+                        images={category.items
+                          .slice(0, 1) 
+                          .map((item) => item.imagePath)}
+                        imgUrl={imgUrl}
+                      />
+                    )}
 
-                      {/* Items listed without images, grouped by subcategory */}
-                      <div className="grid grid-cols-1 gap-x-4">
-                        {Array.from(new Set(category.items.map(item => {
-                          const sub = item.subcategory;
-                          return sub && sub.trim() !== "" ? sub.trim() : "Other";
-                        })))
-                          .sort((a, b) => a === "Other" ? 1 : b === "Other" ? -1 : 0)
-                          .map((subName) => (
-                            <div
-                              key={subName}
-                              className="mb-4"
-                              ref={(el) => {
-                                subRef.current[`${category.category}-${subName}`] = el;
-                              }}
-                            >
-                              {subName !== "Other" && (
-                                <h2 className="font-battambong text-[24px] font-semibold mb-1 px-1 text-black">
-                                  {subName}
-                                </h2>
-                              )}
-                              <div className="flex flex-col w-full">
-                                {category.items
-                                  .filter(item => {
-                                    const sub = item.subcategory;
-                                    const normalizedSub = sub && sub.trim() !== "" ? sub.trim() : "Other";
-                                    return normalizedSub === subName;
-                                  })
-                                  .map((item) => (
-                                    <NightFoodCart
-                                      key={item.id}
-                                      cartItem={item}
-                                      isOrderPage={isOrderPage}
-                                      cur={cur}
-                                    />
-                                  ))}
-                              </div>
-                            </div>
-                          ))}
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      {/* Sok Thean Subcategory */}
-                      {/* Display items grouped by sub-category */}
+                    {/* Items listed without images, grouped by subcategory */}
+                    <div className="grid grid-cols-1 gap-x-4">
                       {Array.from(new Set(category.items.map(item => {
                         const sub = item.subcategory;
                         return sub && sub.trim() !== "" ? sub.trim() : "Other";
@@ -302,17 +260,17 @@ export default function Home() {
                         .map((subName) => (
                           <div
                             key={subName}
-                            className="mb-8"
+                            className="mb-4"
                             ref={(el) => {
                               subRef.current[`${category.category}-${subName}`] = el;
                             }}
                           >
                             {subName !== "Other" && (
-                              <h2 className="font-battambong text-[20px] font-semibold mb-2 px-1 text-black">
+                              <h2 className="font-battambong text-[24px] font-semibold mb-1 px-1 text-black">
                                 {subName}
                               </h2>
                             )}
-                            <div className="flex flex-wrap flex-row justify-between gap-y-4">
+                            <div className="flex flex-col w-full">
                               {category.items
                                 .filter(item => {
                                   const sub = item.subcategory;
@@ -320,6 +278,48 @@ export default function Home() {
                                   return normalizedSub === subName;
                                 })
                                 .map((item) => (
+                                  <NightFoodCart
+                                    key={item.id}
+                                    cartItem={item}
+                                    isOrderPage={isOrderPage}
+                                    cur={cur}
+                                  />
+                                ))}
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                {/* Sok Thean Subcategory */}
+                {/* Display items grouped by sub-category */}
+                {Array.from(new Set(category.items.map(item => {
+                  const sub = item.subcategory;
+                  return sub && sub.trim() !== "" ? sub.trim() : "Other";
+                })))
+                  .sort((a, b) => a === "Other" ? 1 : b === "Other" ? -1 : 0)
+                  .map((subName) => (
+                    <div
+                      key={subName}
+                      className="mb-8"
+                      ref={(el) => {
+                        subRef.current[`${category.category}-${subName}`] = el;
+                      }}
+                    >
+                      {subName !== "Other" && (
+                        <h2 className="font-battambong text-[20px] font-semibold mb-2 px-1 text-black">
+                          {subName}
+                        </h2>
+                      )}
+                      <div className="flex flex-wrap flex-row justify-between gap-y-4">
+                        {category.items
+                          .filter(item => {
+                            const sub = item.subcategory;
+                            const normalizedSub = sub && sub.trim() !== "" ? sub.trim() : "Other";
+                            return normalizedSub === subName;
+                          })
+                          .map((item) => (
 
                                   <Cart
                                     key={item.id}
@@ -344,9 +344,9 @@ export default function Home() {
         {/* Bottom action bar */}
         <div className="fixed bottom-0 px-4 py-4 max-w-[575px] z-[50] items-center w-full cursor-pointer rounded-t-2xl bg-white flex justify-between shadow-[0_-5px_15px_rgba(0,0,0,0.1)]"> {/* Sok Thean popup Component */}
           {/* Display order item component */}
-          <OrderItem
-            cur={cur}
-            historyOrder={historyOrder}
+          <OrderItem 
+            cur={cur} 
+            historyOrder={historyOrder} 
             setHistoryOrder={setHistoryOrder}
             isClickOrder={isClickOrder}
             setClickOrder={setClickOrder}

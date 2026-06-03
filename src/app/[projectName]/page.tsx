@@ -5,6 +5,7 @@ import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import { useTranslation } from "@/lib/i18n";
 import { Loading } from "@/components/core";
+import { AutoPrinter } from "@/components";
 
 // Fallback tables mapped with IDs, Names and Zones
 const FALLBACK_TABLES = [
@@ -64,14 +65,14 @@ export default function TableSelectionPage() {
       try {
         // Fetch branding & tables in parallel
         const [brandRes, tablesRes] = await Promise.allSettled([
-          axios.get(`https://tonle-coffee.pos.tsdsolution.net/api/DriverController/setting`),
-          axios.get(`https://tonle-coffee.pos.tsdsolution.net/api/DriverController/tables`)
+          axios.get(`https://${projectName}.tsdsolution.net/api/DriverController/setting`),
+          axios.get(`https://${projectName}.tsdsolution.net/api/DriverController/tables`)
         ]);
 
         if (brandRes.status === "fulfilled" && brandRes.value.data) {
           setStoreInfo({
             siteName: brandRes.value.data.site_name || "Tonle Coffee",
-            logoUrl: `https://tonle-coffee.pos.tsdsolution.net/assets/uploads/logos/${brandRes.value.data.logo}`
+            logoUrl: `https://${projectName}.tsdsolution.net/assets/uploads/logos/${brandRes.value.data.logo}`
           });
         }
 
@@ -153,6 +154,12 @@ export default function TableSelectionPage() {
 
       {/* Main Container */}
       <div className="w-full max-w-[575px] flex-1 flex flex-col gap-4">
+        {/* POS Auto-Printing Terminal */}
+        <AutoPrinter 
+          projectName={Array.isArray(projectName) ? projectName[0] : projectName || ""} 
+          logoUrl={storeInfo.logoUrl} 
+        />
+
         {/* Search Input */}
         {/* <div className="relative w-full shadow-sm rounded-xl">
           <input
@@ -190,10 +197,11 @@ export default function TableSelectionPage() {
                 <li key={zone}>
                   <button
                     onClick={() => setSelectedZone(zone)}
-                    className={`text-nowrap px-4 py-2 text-xs font-semibold rounded-full border transition-all duration-200 ${isActive
+                    className={`text-nowrap px-4 py-2 text-xs font-semibold rounded-full border transition-all duration-200 ${
+                      isActive
                         ? "bg-orange-600 border-orange-600 text-white shadow-md transform -translate-y-[1px]"
                         : "bg-white border-gray-200 text-gray-700 hover:border-gray-300"
-                      }`}
+                    }`}
                   >
                     {displayZone}
                   </button>
@@ -213,17 +221,19 @@ export default function TableSelectionPage() {
                   <button
                     key={table.id}
                     onClick={() => handleTableSelect(table.id)}
-                    className={`group relative flex flex-col justify-center items-center py-6 px-3 border rounded-2xl transition-all duration-300 hover:scale-[1.04] active:scale-[0.97] shadow-sm ${isOccupied
+                    className={`group relative flex flex-col justify-center items-center py-6 px-3 border rounded-2xl transition-all duration-300 hover:scale-[1.04] active:scale-[0.97] shadow-sm ${
+                      isOccupied
                         ? "bg-red-300 border-rose-200/80 hover:border-rose-400 text-white hover:shadow-[0_8px_20px_rgba(239,68,68,0.1)]"
                         : "bg-sky-50 hover:bg-sky-100/70 border-sky-200/80 hover:border-sky-400 text-sky-950 hover:shadow-[0_8px_20px_rgba(14,165,233,0.1)]"
-                      }`}
+                    }`}
                   >
                     {/* Status Pill Badge */}
                     <span
-                      className={`absolute top-2 right-2 text-[8px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider ${isOccupied
+                      className={`absolute top-2 right-2 text-[8px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider ${
+                        isOccupied
                           ? "bg-red-500 text-white animate-pulse"
                           : "bg-sky-500 text-white"
-                        }`}
+                      }`}
                     >
                       {isOccupied ? t("occupied") : t("available")}
                     </span>
@@ -236,31 +246,34 @@ export default function TableSelectionPage() {
                       strokeWidth="2.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className={`w-12 h-12 mb-2 transition-transform duration-300 group-hover:scale-105 ${isOccupied ? "text-red-600" : "text-sky-600"
-                        }`}
+                      className={`w-12 h-12 mb-2 transition-transform duration-300 group-hover:scale-105 ${
+                        isOccupied ? "text-red-600" : "text-sky-600"
+                      }`}
                     >
                       {/* Left Chair */}
                       <path d="M12 20h6v18h-6z M12 28h6" />
                       <path d="M15 38v8" />
-
+                      
                       {/* Right Chair */}
                       <path d="M46 20h6v18h-6z M46 28h6" />
                       <path d="M49 38v8" />
-
+                      
                       {/* Table Top & legs */}
                       <path d="M22 26h20v4H22z" />
                       <path d="M25 30v16 M39 30v16" />
                     </svg>
-
+                    
                     {/* Table name */}
-                    <span className={`text-xl font-black font-dangrek transition-colors duration-200 ${isOccupied ? "text-red-950 group-hover:text-red-600" : "text-sky-950 group-hover:text-sky-600"
-                      }`}>
+                    <span className={`text-xl font-black font-dangrek transition-colors duration-200 ${
+                      isOccupied ? "text-red-950 group-hover:text-red-600" : "text-sky-950 group-hover:text-sky-600"
+                    }`}>
                       {table.name}
                     </span>
-
+                    
                     {/* Zone description */}
-                    <span className={`text-[10px] mt-0.5 font-medium tracking-wide ${isOccupied ? "text-red-600/60" : "text-sky-600/60"
-                      }`}>
+                    <span className={`text-[10px] mt-0.5 font-medium tracking-wide ${
+                      isOccupied ? "text-red-600/60" : "text-sky-600/60"
+                    }`}>
                       {table.zone === "VIP / Special" ? t("vipZone") : table.zone}
                     </span>
                   </button>

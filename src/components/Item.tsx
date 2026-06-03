@@ -14,9 +14,9 @@ type PropsType = {
 export default function Item({ cartItem, cur }: PropsType) {
     //AKK Translation
     const { locale } = useTranslation();
-    const { projectName } = useParams()
-    const { name, second_name, price, promo_price, id, cartItemId, imagePath, quantity } = cartItem
-
+    const {projectName} = useParams()
+    const {name, second_name, price, promo_price, id, cartItemId, imagePath, quantity}= cartItem
+    
     const displayName = (locale === 'en' && second_name) ? second_name : name;
     //End AKK Translation
     const real_price = numeral(promo_price).format('0.[00]')
@@ -24,12 +24,12 @@ export default function Item({ cartItem, cur }: PropsType) {
     const imgUrl = `https://tonle-coffee.pos.tsdsolution.net/assets/uploads/`
     const dispatch = useDispatch();
     const handleQuantityChange = (newQuantity: number) => {
-        if (newQuantity > 0) {
-            dispatch(updateCartItem({ cartItemId: cartItemId || id, quantity: newQuantity }));
+        if(newQuantity > 0){
+        dispatch(updateCartItem({ cartItemId: cartItemId || id, quantity: newQuantity }));
         }
     };
 
-    const handleRemove = (identifier: string) => {
+    const handleRemove = (identifier: string)=>{
         console.log(identifier)
         dispatch(removeFromCart({ cartItemId: identifier }))
     }
@@ -65,7 +65,7 @@ export default function Item({ cartItem, cur }: PropsType) {
                 {/* customize item  */}
                 <div className='flex flex-row items-center space-x-2'>
                     {/* delete button  */}
-                    <button onClick={() => handleRemove(cartItemId || id)} className='bg-orange-100 rounded-full w-8 h-8 flex justify-center items-center flex-shrink-0'>
+                    <button onClick={()=> handleRemove(cartItemId || id)} className='bg-orange-100 rounded-full w-8 h-8 flex justify-center items-center flex-shrink-0'>
                         <img src={"/icons/delete.svg"} alt='' className='h-4 w-4' />
                     </button>
 
