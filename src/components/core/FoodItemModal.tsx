@@ -67,7 +67,7 @@ const FoodItemModal: React.FC<PropType> = ({
   return createPortal(
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300" onClick={onClose}>
       <div 
-        className="bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl relative animate-in zoom-in-95 duration-200"
+        className="bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl relative animate-in zoom-in-90 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -81,7 +81,7 @@ const FoodItemModal: React.FC<PropType> = ({
         </button>
 
         {/* Image Section */}
-        <div className="w-full h-64 relative">
+        <div className="w-full h-60 relative">
           <img
             src={`${imgUrl}${imagePath}`}
             alt={name}
@@ -90,8 +90,8 @@ const FoodItemModal: React.FC<PropType> = ({
         </div>
 
         {/* Content Section */}
-        <div className="p-6">
-          <div className="flex flex-row justify-between items-center gap-4 mb-6">
+        <div className="p-3">
+          <div className="flex flex-row justify-between items-center gap-2 mb-4">
             <h2 className="text-2xl font-dangrek font-bold text-black leading-tight">
               {displayName}
             </h2>
@@ -157,13 +157,13 @@ const FoodItemModal: React.FC<PropType> = ({
           )}
 
           {/* Comment Field */}
-          <div className="mb-4">
+          <div className="mb-2">
             <label htmlFor="item-comment" className="block text-sm font-battambong font-semibold text-gray-700 mb-2">
               {t("optionalCommentLabel")}
             </label>
             <textarea
               id="item-comment"
-              rows={2}
+              rows={1}
               className="w-full p-4 bg-gray-50 rounded-xl border border-gray-100 focus:bg-white focus:border-orange focus:ring-4 focus:ring-orange/10 outline-none transition-all duration-300 resize-none text-gray-800 placeholder:text-gray-400 font-battambong shadow-inner hover:shadow-md"
               placeholder={t("commentPlaceholder")}
               value={comment}

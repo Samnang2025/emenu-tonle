@@ -36,7 +36,7 @@ export default function NavBar() {
   }, [projectName]);
 
   return (
-    <nav className='bg-white p-2 px-3 m-1 flex flex-row justify-between items-center pb-0 z-10 max-w-[575px] w-full '>
+    <nav className='bg-white px-3 m-1 flex flex-row justify-between items-center pb-0 z-10 max-w-[575px] w-full '>
       {/* Logo and Title Section */}
       <div className='flex flex-row items-center space-x-2'>
         {/* <Logo className={"max-[600px]:h-[31.2px] max-[600px]:w-[62.4px] h-[100px] w-[100px]"} image={`https://tonle-coffee.pos.tsdsolution.net/assets/uploads/logos/${metadata?.icons}`} /> */}
