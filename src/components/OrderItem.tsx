@@ -23,6 +23,29 @@ export default function OrderItem({ cur, historyOrder, setHistoryOrder, isClickO
 
   const dispatch = useDispatch()
 
+    // Fetch table name fallback if history order is null
+  const [tableName, setTableName] = useState("");
+
+  useEffect(() => {
+    if (historyOrder?.data?.table_name) {
+      setTableName(historyOrder.data.table_name);
+    } else if (tableNumber) {
+      const fetchTableName = async () => {
+        try {
+          const res = await axios.get(`https://tonle-coffee.pos.tsdsolution.net/api/DriverController/tables`);
+          if (res.data && Array.isArray(res.data)) {
+            const currentTable = res.data.find((t: any) => t.id === tableNumber);
+            if (currentTable) {
+              setTableName(currentTable.name);
+            }
+          }
+        } catch (e) {
+          console.error("Error fetching table name", e);
+        }
+      };
+      fetchTableName();
+    }
+  }, [historyOrder, tableNumber]);
 
   // my code old
 
@@ -101,7 +124,7 @@ export default function OrderItem({ cur, historyOrder, setHistoryOrder, isClickO
           <div className="flex flex-col h-[100vh]  items-center relative ">
             <div>
               <h1 className="text-center font-dangrek p-2 text-xl"> {t("orderSummary")}<br />
-                <span className="text-orange-400">{tableNumber}</span></h1>
+                <span className="text-orange-400">{tableName}</span></h1>
             </div>
             <div className="w-full bg-transparent border-[1px] border-dashed border-black"></div>
             <div className="w-full px-4">
