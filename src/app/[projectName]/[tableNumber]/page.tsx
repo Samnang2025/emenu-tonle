@@ -178,11 +178,12 @@ export default function Home() {
         {data[activeSection] && (
           <ul className="no-scrollbar flex flex-nowrap gap-2 overflow-x-scroll" style={{ "margin": "0px 60px", "paddingBottom": "5px" }}>
             {Array.from(new Set(data[activeSection].items.map(item => {
+              // akk Other Subcate
               const sub = item.subcategory;
-              return sub && sub.trim() !== "" ? sub.trim() : "Other";
+              return sub && sub.trim() !== "" ? sub.trim() : "ផ្សេងៗ";
             })))
-              .filter(subName => subName !== "Other")
-              .sort((a, b) => a === "Other" ? 1 : b === "Other" ? -1 : 0)
+              .sort((a, b) => a === "ផ្សេងៗ" ? 1 : b === "ផ្សេងៗ" ? -1 : 0)
+              // end Other Subcate
               .map((subName) => (
                 <li
                   key={subName}
@@ -260,9 +261,9 @@ export default function Home() {
                       <div className="grid grid-cols-1 gap-x-4">
                         {Array.from(new Set(category.items.map(item => {
                           const sub = item.subcategory;
-                          return sub && sub.trim() !== "" ? sub.trim() : "Other";
+                          return sub && sub.trim() !== "" ? sub.trim() : "ផ្សេងៗ";
                         })))
-                          .sort((a, b) => a === "Other" ? 1 : b === "Other" ? -1 : 0)
+                          .sort((a, b) => a === "ផ្សេងៗ" ? 1 : b === "ផ្សេងៗ" ? -1 : 0)
                           .map((subName) => (
                             <div
                               key={subName}
@@ -271,16 +272,14 @@ export default function Home() {
                                 subRef.current[`${category.category}-${subName}`] = el;
                               }}
                             >
-                              {subName !== "Other" && (
-                                <h2 className="font-battambong text-[24px] font-semibold mb-1 px-1 text-black">
-                                  {subName}
-                                </h2>
-                              )}
+                              <h2 className="font-battambong text-[24px] font-semibold mb-1 px-1 text-black">
+                                {subName}
+                              </h2>
                               <div className="flex flex-col w-full">
                                 {category.items
                                   .filter(item => {
                                     const sub = item.subcategory;
-                                    const normalizedSub = sub && sub.trim() !== "" ? sub.trim() : "Other";
+                                    const normalizedSub = sub && sub.trim() !== "" ? sub.trim() : "ផ្សេងៗ";
                                     return normalizedSub === subName;
                                   })
                                   .map((item) => (
@@ -301,10 +300,12 @@ export default function Home() {
                       {/* Sok Thean Subcategory */}
                       {/* Display items grouped by sub-category */}
                       {Array.from(new Set(category.items.map(item => {
+                        // akk Other Subcategory
                         const sub = item.subcategory;
-                        return sub && sub.trim() !== "" ? sub.trim() : "Other";
+                        return sub && sub.trim() !== "" ? sub.trim() : "ផ្សេងៗ";
+                        // end akk Other Subcategory
                       })))
-                        .sort((a, b) => a === "Other" ? 1 : b === "Other" ? -1 : 0)
+                        .sort((a, b) => a === "ផ្សេងៗ" ? 1 : b === "ផ្សេងៗ" ? -1 : 0)
                         .map((subName) => (
                           <div
                             key={subName}
@@ -313,16 +314,14 @@ export default function Home() {
                               subRef.current[`${category.category}-${subName}`] = el;
                             }}
                           >
-                            {subName !== "Other" && (
-                              <h2 className="font-battambong text-[20px] font-semibold mb-2 px-1 text-black">
-                                {subName}
-                              </h2>
-                            )}
+                            <h2 className="font-battambong text-[20px] font-semibold mb-2 px-1 text-black">
+                              {subName}
+                            </h2>
                             <div className="flex flex-wrap flex-row justify-between gap-y-4">
                               {category.items
                                 .filter(item => {
                                   const sub = item.subcategory;
-                                  const normalizedSub = sub && sub.trim() !== "" ? sub.trim() : "Other";
+                                  const normalizedSub = sub && sub.trim() !== "" ? sub.trim() : "ផ្សេងៗ";
                                   return normalizedSub === subName;
                                 })
                                 .map((item) => (
