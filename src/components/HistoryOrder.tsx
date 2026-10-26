@@ -41,6 +41,13 @@ export default function HistoryOrder({ cartItem, cur, index }: PropsType) {
                     {/* Item details (name, price, promo_price) */}
                     <div>
                         <p className='font-battambong text-sm'>{displayName}</p>
+                        {/* Sok Thean Add comment */}
+                        {(cartItem.comment || cartItem.note) && (
+                            <p className='text-xs text-gray-500 italic font-battambong'>
+                                {cartItem.comment || cartItem.note}
+                            </p>
+                        )}
+                        {/* End ST Add comment */}
                         <div className="space-x-3">
                             <span className='text-orange-600 font-bold'>{cur || "$"}{promo_price ? real_price : actual_price}</span>
                             {

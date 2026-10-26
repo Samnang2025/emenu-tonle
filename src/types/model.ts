@@ -57,7 +57,8 @@ interface CartState {
 // Details of a single order item in the order history
 interface orderHistory {
   code: string; // Code associated with the order item
-  comment: string; // Comment associated with the order item
+  comment?: string | null; // Comment associated with the order item
+  note?: string | null; // Note associated with the order item
   id: string; // Unique identifier for the order item
   imagePath: string; // Path to the image of the order item
   name: string; // Name of the order item
@@ -79,6 +80,7 @@ interface orderHistoryType {
     table_id: string; // ID of the table associated with the order
     table_name?: string; // Table name from the API
     table_num?: string; // Table number from the API
+    note?: string; // Order note
   };
   items: orderHistory[]; // Array of items in the order
 }

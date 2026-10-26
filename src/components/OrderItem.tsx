@@ -144,6 +144,11 @@ export default function OrderItem({ cur, historyOrder, setHistoryOrder, isClickO
             {historyOrder ? (
               <div className="w-full px-3 ">
                 <h1 className="font-dangrek text-center mt-5">{t("completedOrder")}</h1>
+                {((historyOrder.data?.note) || (historyOrder.data?.suspend_note && historyOrder.data.suspend_note !== tableName)) && (
+                  <p className="text-xs text-gray-500 italic text-center font-battambong mb-2">
+                    {historyOrder.data.note || historyOrder.data.suspend_note}
+                  </p>
+                )}
                 <div className="flex flex-col w-full space-y-3">
                   {
                     historyOrder?.items?.map((item: any, index: any) => (
