@@ -1,13 +1,14 @@
 "use client";
-import React from "react";
+import React, { memo } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import numeral from "numeral";
 import { useTranslation } from "@/lib/i18n";
 
-export default function BasketBar({ cur, historyOrder }: any) {
+function BasketBar({ cur, historyOrder }: any) {
   const { t } = useTranslation();
-  const { totalItems, totalPrice } = useSelector((state: RootState) => state.cart);
+  const totalItems = useSelector((state: RootState) => state.cart.totalItems);
+  const totalPrice = useSelector((state: RootState) => state.cart.totalPrice);
 
   const displayPrice = historyOrder?.data ? (parseFloat(historyOrder.data.total_price || "0") + totalPrice) : totalPrice;
   const displayItems = historyOrder?.data ? (parseInt(historyOrder.data.totalItems || "0") + totalItems) : totalItems;
@@ -36,3 +37,5 @@ export default function BasketBar({ cur, historyOrder }: any) {
     </>
   );
 }
+
+export default memo(BasketBar);

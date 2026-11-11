@@ -52,10 +52,15 @@ export function I18nProvider({
       const cur = LOCALES["kh"] || {};
       return cur[key] ?? LOCALES.en[key] ?? key;
     };
-  }, [locale]);
+  }, []);
+
+  const contextValue = useMemo(
+    () => ({ locale: "kh" as LocaleKey, setLocale, t }),
+    [t]
+  );
 
   return (
-    <I18nContext.Provider value={{ locale: "kh", setLocale, t }}>
+    <I18nContext.Provider value={contextValue}>
       {children}
     </I18nContext.Provider>
   );
